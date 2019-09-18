@@ -1,0 +1,33 @@
+﻿rt-thread-3.1.0
+
+
+(1) 在rt-thread的github仓库release页面中下载3.1.0发布包，打开bsp\stm32f10x\project.uvproj
+
+(2) mdk4项目设置，切换到stm32f103rc（宏不用改）和jlink
+
+(3) 根据这个网站
+https://www.rt-thread.org/document/site/tutorial/quick-start/stm32f103-atk-nano/quick-start/
+
+使用串口工具（如：PuTTY）打开板子对应的串口(115200-8-1-N) ，复位设备后，可以看到 RT-Thread 的输出信息:
+
+修改putty的设置
+
+
+(4) 默认的led例子中，pin操作需要自己修改代码的操作，例如看rt_hw_led_on的实现代码修改相应的针脚号，才能够看到闪烁效果。
+也就是说关于驱动的部分要根据开发板的实际情况做修改移植
+例如中景园的板LED在PD2，需要修改led.c中的宏（led1_pin附近的3个宏）
+
+
+-----------------------
+
+
+【rt-thread学习第1回】，今天开始研究rt-thread。rt-thread和alios things类似，都是从stm32发展起来的实时操作系统（严格来说是类似freertos那样子的线程库），不过我个人认为rt-thread要比alios things好，因为前者是兼容stm32f1的，而后者还是主打stm32f4。rt-thread可以简单理解为一个代码良好的大型项目模板，你可以发挥创意随意地添加功能（驱动程序），把它变成自己的stm32项目模板。那么下面就开始做实验了。
+(1) 首先，我手头上没有rt-thread官方文档里面提到的那几款开发板，我认为那些开发板都太贵了，我推荐这款，中景园stm32f103rct6，售价32元，试过是可以跑得起来rt-thread。如果有类似暴露串口uart针脚的开发板（或者知道怎么接uart），也可以用。接好串口和USB转TTL转接器到电脑上
+(2) 然后，在rt-thread的github仓库release页面中下载3.1.0发布包，用mdk4打开bsp\stm32f10x\project.uvproj（我这里用mdk4是兼容xp）
+(3) 修改mdk4项目设置，切换到stm32f103rc（宏不用改）和jlink
+(4) 根据这个网站
+https://www.rt-thread.org/document/site/tutorial/quick-start/stm32f103-atk-nano/quick-start/
+根据里面提到的115200-8-1-N，修改putty的设置
+(5) 默认的led例子中，led操作需要自己修改代码的操作，例如看rt_hw_led_on的实现代码修改相应的针脚号，才能够看到闪烁效果。也就是说关于驱动的部分要根据开发板的实际情况做修改移植，例如中景园的板LED在PD2，需要修改led.c中的宏（led1_pin附近的3个宏）。
+总结，关于rt-thread的主体和串口REPL，都不需要改任何代码。而关于驱动代码，与rt-thread的API几乎没有依赖，只是需要写很短的代码融入到这个框架中变成自启动的线程
+

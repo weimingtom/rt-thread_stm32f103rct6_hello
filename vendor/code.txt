@@ -1,0 +1,2 @@
+INIT_APP_EXPORT(finsh_system_init);
+rt_application_init
